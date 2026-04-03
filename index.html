@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emre Ouzoun - Hava Durumu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f0c29">
+    <link rel="apple-touch-icon" href="icon.png">
+</head>
+
+<body>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log('Service Worker Registered'))
+                .catch(err => console.log('SW Error:', err));
+        }
+    </script>
+    <div class="background-container" id="bgContainer">
+        <canvas id="weatherCanvas"></canvas>
+    </div>
+
+    <main class="container">
+        <div class="glass-card">
+            <div class="search-section">
+                <input type="text" id="cityInput" placeholder="Şehir ara (Örn: İstanbul)..." autocomplete="off">
+                <button id="searchBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+                <button id="locationBtn" title="Konumumu Bul">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                </button>
+                <button id="favoriteBtn" title="Favorilere Ekle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon
+                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                        </polygon>
+                    </svg>
+                </button>
+                <button id="installAppBtn" class="hidden" title="Uygulamayı Yükle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="favorites-bar hidden" id="favoritesBar">
+                <!-- Favori şehirlerimi burada listeleyeceğim -->
+            </div>
+
+            <div class="weather-content" id="weatherContent">
+                <!-- Başlangıç durumumu ve verimi yüklüyorum -->
+                <div class="initial-message">
+                    <p>Hava durumunu görmek için bir şehir arayın veya konumunuzu kullanın.</p>
+                </div>
+            </div>
+
+            <div id="forecastSection" class="hidden">
+                <h3 class="forecast-title">7 Günlük Tahmin</h3>
+                <div class="forecast-container" id="forecastContainer">
+                    <!-- Günlük tahminlerimi buraya yerleştireceğim -->
+                </div>
+            </div>
+
+            <div id="loadingSpinner" class="hidden">
+                <div class="spinner"></div>
+            </div>
+        </div>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <p class="dev-projects">Click here to view more projects: <a href="https://github.com/EmreOuzouns" target="_blank">https://github.com/EmreOuzouns</a></p>
+    </footer>
+
+    <div id="toast" class="toast hidden"></div>
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,504 @@
+:root {
+    --primary-bg: #0f0c29;
+    --accents: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+    --glass-bg: rgba(255, 255, 255, 0.02);
+    --glass-border: rgba(255, 255, 255, 0.05);
+    --text-color: #ffffff;
+    --text-muted: rgba(255, 255, 255, 0.7);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,600&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--primary-bg);
+    /* Uygulamamı ilk açtığımda oluşan parlak beyaz ekranı engelliyorum */
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-color);
+    overflow-x: hidden;
+    overflow-y: auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* İçeriğimi ekranımla merkeze hizalıyorum */
+}
+
+.app-container {
+    position: relative;
+    z-index: 2;
+    /* İçeriğimin arka plan üstünde tam oturmasını sağlıyorum */
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    /* Kaydırma yaptığımda sayfadaki nesnelerimin kesilmesini önlüyorum */
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+/* Dinamik hava durumu arkaplanlarımı yapılandırıyorum */
+.background-container {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+    transition: background 1s ease;
+}
+
+/* Varsayılan güneşli hava tasarımım */
+.weather-bg.clear {
+    background: linear-gradient(to bottom, #2980b9, #6dd5fa, #ffffff);
+}
+
+.weather-bg.clear.night {
+    background: linear-gradient(to bottom, #050a24, #182848);
+}
+
+/* Bulutlu hava arka plan tasarımım */
+.weather-bg.cloudy {
+    background: linear-gradient(to bottom, #203a43, #2c5364);
+}
+
+.weather-bg.cloudy.night {
+    background: linear-gradient(to bottom, #0f2027, #203a43, #233446);
+}
+
+/* Yağmurlu hava tasarımım */
+.weather-bg.rain {
+    background: linear-gradient(to bottom, #485563, #29323c);
+}
+
+.weather-bg.rain.night {
+    background: linear-gradient(to bottom, #141e30, #243b55);
+}
+
+/* Sağanak ve fırtına tasarımım */
+.weather-bg.heavy_rain {
+    background: linear-gradient(to bottom, #2b333c, #161a20);
+}
+
+.weather-bg.heavy_rain.night {
+    background: linear-gradient(to bottom, #090e14, #101924);
+}
+
+/* Karlı hava tasarımım */
+.weather-bg.snow {
+    background: linear-gradient(to bottom, #83a4d4, #b6fbff);
+}
+
+.weather-bg.snow.night {
+    background: linear-gradient(to bottom, #1e3c72, #2a5298);
+}
+
+#weatherCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Kullanıcı arayüzüm için şık cam efektli kartımı tasarlıyorum */
+.container {
+    z-index: 1;
+    width: 100%;
+    max-width: 450px;
+    padding: 20px;
+}
+
+.glass-card {
+    margin: auto;
+    /* Kartımın dikeyde güvenli bir şekilde ortalanmasını sağlıyorum */
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    transition: transform 0.3s ease;
+}
+
+/* Arama kutumu ve butonlarımı tasarlıyorum */
+.search-section {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 2rem;
+}
+
+input {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+button {
+    padding: 8px;
+    border-radius: 10px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: white;
+    color: #333;
+    cursor: pointer;
+    transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button svg {
+    width: 18px;
+    height: 18px;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+#installAppBtn {
+    background: #00e5ff;
+    color: #0f0c29;
+}
+
+#installAppBtn:hover {
+    background: #00b8cc;
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+}
+
+/* Hava durumu bilgimi göstereceğim alanı tasarlıyorum */
+.weather-content {
+    text-align: center;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.initial-message {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+.city-name {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.date {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.local-time {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+
+.temperature-container {
+    margin-bottom: 2rem;
+}
+
+.temp {
+    font-size: 5rem;
+    font-weight: 700;
+    line-height: 1;
+    background: -webkit-linear-gradient(#fff, #ccc);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.condition {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    margin-top: 10px;
+    text-transform: capitalize;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 2rem;
+}
+
+.detail-item {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.detail-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.detail-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.fishing-status.excellent {
+    color: #4ade80;
+}
+
+.fishing-status.average {
+    color: #facc15;
+}
+
+.fishing-status.bad {
+    color: #f87171;
+}
+
+
+.favorites-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 8px;
+    scrollbar-width: thin;
+}
+
+
+.favorites-bar::-webkit-scrollbar {
+    height: 6px;
+}
+
+.favorites-bar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+.favorites-bar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+
+.favorite-chip {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 5px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.favorite-chip:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.favorite-chip.active {
+    background: white;
+    color: #333;
+}
+
+
+#forecastSection {
+    margin-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 2rem;
+}
+
+.forecast-title {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.forecast-container {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+
+.forecast-container::-webkit-scrollbar {
+    height: 6px;
+}
+
+.forecast-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+.forecast-card {
+    min-width: 100px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.forecast-day {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.forecast-icon {
+    font-size: 1.5rem;
+    margin: 5px 0;
+}
+
+.forecast-temp {
+    font-weight: 600;
+}
+
+.forecast-temp span {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 400;
+    margin-left: 5px;
+}
+
+
+.hidden {
+    display: none !important;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top: 4px solid #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.app-footer {
+    z-index: 1;
+    text-align: center;
+    padding: 20px;
+    margin-top: auto;
+    margin-bottom: 20px;
+}
+
+.dev-name {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 1.25rem;
+    background: linear-gradient(to right, #f6d365 0%, #fda085 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0px 4px 20px rgba(0, 0, 0, 0.8);
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.dev-projects {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: #ffffff;
+    text-shadow: 0px 2px 12px rgba(0, 0, 0, 0.9);
+}
+
+.dev-projects a {
+    color: #00e5ff;
+    text-decoration: none;
+    font-weight: 700;
+    text-shadow: 0px 0px 10px rgba(0, 229, 255, 0.5), 0px 2px 5px rgba(0, 0, 0, 0.9);
+    transition: all 0.3s;
+}
+
+.dev-projects a:hover {
+    color: #ffffff;
+    text-shadow: 0px 0px 15px #00e5ff, 0px 0px 25px #00e5ff;
+}
+
+/* Bilgilendirme (Toast) mesajlarımı tasarlıyorum */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: rgba(15, 12, 41, 0.9);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 0.95rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    z-index: 1000;
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.3s;
+    opacity: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
