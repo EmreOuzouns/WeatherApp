@@ -16,14 +16,11 @@
 ---
 
 ## 📸 Preview
+<img width="1918" height="1001" alt="Ekran görüntüsü 2026-03-31 140228" src="https://github.com/user-attachments/assets/0306837b-ae7c-4c85-a989-bd1769ef6969" />
+<img width="1901" height="1002" alt="Ekran görüntüsü 2026-03-31 134929" src="https://github.com/user-attachments/assets/22caca35-2e6f-40fd-a605-0870b35f589a" />
+<img width="1905" height="1008" alt="Ekran görüntüsü 2026-03-31 140402" src="https://github.com/user-attachments/assets/f6b6fba7-4e1d-48a3-b6af-d6deeb671411" />
 
-<p align="center">
-  <img width="800" alt="Ekran görüntüsü 2026-03-31 140402" src="https://github.com/user-attachments/assets/7ccd3eb8-7a75-4b95-9cae-d62d72f6e590" />
-  <br><br>
-  <img width="800" alt="Ekran görüntüsü 2026-03-31 140228" src="https://github.com/user-attachments/assets/1bc3ead4-95c4-48e1-8a2f-f32a1006956b" />
-  <br><br>
-  <img width="800" alt="Ekran görüntüsü 2026-03-31 134929" src="https://github.com/user-attachments/assets/fb37cca2-dd16-4fc3-8efa-d33e2a5c8a93" />
-</p>
+
 
 ## ✨ Features
 
